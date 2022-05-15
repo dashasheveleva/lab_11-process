@@ -20,21 +20,38 @@ HunterGate(
   SHA1 "95c47c92f68edb091b5d6d18924baabe02a6962a"
 )
 
-# TODO: rename project and delete this comment
 project(template VERSION 0.1.0)
 string(APPEND CMAKE_CXX_FLAGS " -pedantic -Werror -Wall -Wextra")
 string(APPEND CMAKE_CXX_FLAGS " -Wno-unused-command-line-argument")
 string(APPEND CMAKE_CXX_FLAGS " -Wshadow -Wnon-virtual-dtor")
 
-# new versions of cmake contain gtest search files
-# commented out to increase the build speed.
-# hunter_add_package(GTest)
+hunter_add_package(GTest)
 find_package(GTest CONFIG REQUIRED)
 
-add_library(${PROJECT_NAME} STATIC
-  # enum your files and delete this comment
-  ${CMAKE_CURRENT_SOURCE_DIR}/sources/example.cpp
+hunter_add_package(Boost COMPONENTS
+        program_options
+        log
+        thread
+        system
+        filesystem
 )
+find_package(Boost CONFIG REQUIRED
+        program_options
+        log
+        log_setup
+        thread
+        system
+        filesystem
+)
+find_package(Threads)
+
+hunter_add_package(Async++)
+find_package(Async++ CONFIG REQUIRED)
+
+add_library(${PROJECT_NAME} STATIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/sources/builder.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/sources/process.cpp
+        sources/timer.cpp include/timer.hpp)
 
 add_executable(builder
         ${CMAKE_CURRENT_SOURCE_DIR}/builder/main.cpp
@@ -46,11 +63,20 @@ target_include_directories(${PROJECT_NAME} PUBLIC
 )
 
 target_link_libraries(builder ${PROJECT_NAME})
+target_link_libraries(${PROJECT_NAME}
+        Boost::program_options
+        ${Boost_LOG_SETUP_LIBRARY}
+        ${Boost_LOG_LIBRARY}
+        ${Boost_THREAD_LIBRARY}
+        ${Boost_SYSTEM_LIBRARY}
+        ${Boost_FILESYSTEM_LIBRARY}
+        pthread
+        Async++::Async++
+)
 
 if(BUILD_TESTS)
   add_executable(tests
-    # TODO: enum your files and delete this comment
-    ${CMAKE_CURRENT_SOURCE_DIR}/tests/example.cpp
+          ${CMAKE_CURRENT_SOURCE_DIR}/tests/tests.cpp
   )
   target_link_libraries(tests ${PROJECT_NAME} GTest::gtest_main)
   enable_testing()
