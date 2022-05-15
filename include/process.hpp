@@ -33,8 +33,8 @@ class Process{
   const std::string INSTALL_TARGET = "_install";
   Process(std::string config_, bool install_, bool pack_, int time_);
   bool get_pack() const;
-  bool get_install() const ;
-  int get_time() const ;
+  bool get_install() const;
+  int get_time() const;
   std::string get_command(const std::string& target);
 };
 

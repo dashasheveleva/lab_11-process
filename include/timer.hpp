@@ -12,7 +12,7 @@ class Timer{
   std::thread _timer_thread;
 
  public:
-  Timer(Timer&& t) ;
+  Timer(Timer&& t);
   Timer(std::chrono::seconds delay,
         std::function<void(Process_info&)> callback_obj,
         Process_info& pdata)
@@ -20,7 +20,7 @@ class Timer{
           std::this_thread::sleep_for(std::chrono::seconds(delay));
           callback_obj(pdata);
         }) {}
-  ~Timer() ;
+  ~Timer();
 };
 
 #endif  // INCLUDE_TIMER_HPP_
