@@ -50,8 +50,7 @@ find_package(Async++ CONFIG REQUIRED)
 
 add_library(${PROJECT_NAME} STATIC
         ${CMAKE_CURRENT_SOURCE_DIR}/sources/builder.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/sources/process.cpp
-        sources/timer.cpp include/timer.hpp)
+)
 
 add_executable(builder
         ${CMAKE_CURRENT_SOURCE_DIR}/builder/main.cpp

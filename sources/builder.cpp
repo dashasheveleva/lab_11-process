@@ -8,17 +8,22 @@ void Builder::create_program_options(
     const int& argc, const char** argv) {
   desc.add_options()
       ("help,h", "Help screen\n")
+
       ("log_lvl,l", boost::program_options::value<std::string>()->
-           default_value("Debug"),
+          default_value("debug"),
            "Logger severity\n")
+
       ("config,c", boost::program_options::value<std::string>()->
           default_value("Debug"),
-          "Config build\n")
+       "Config build\n")
+
       ("install,i", "Install step\n")
+
       ("pack,p", "Pack step\n")
-      ("timeout,t", boost::program_options::value<int>()->
-          default_value(0),
-          "Set waiting time\n");
+
+      ("timeout,t", boost::program_options::value<int>()
+          ->default_value(0),
+                           "Set waiting time\n");
   store(parse_command_line(argc, argv, desc), vmap);
   notify(vmap);
 }
@@ -45,7 +50,7 @@ void Builder::start(const boost::program_options::variables_map& vm) {
                                                bool {return this->run_process(
                                                      "config",
                                                      process_info);
-                                               });
+    });
 
     pack.wait();
     if (pack.get()) {
@@ -104,7 +109,7 @@ bool Builder::run_process(const std::string& target, Process_info& process_info)
     return true;
   }
 }
-void Builder::init(const logging::severity_level& sev_lvl) {
+void Builder::init(const boost::log::trivial::severity_level& sev_lvl) {
   boost::log::add_common_attributes();
 
   boost::log::core::get()->set_filter(boost::log::trivial::severity >=
@@ -114,21 +119,21 @@ void Builder::init(const logging::severity_level& sev_lvl) {
                               boost::log::keywords::format =
                                   "[%Severity%] %TimeStamp%: %Message%");
 }
-logging::severity_level Builder::choose_sev_lvl(
+boost::log::trivial::severity_level Builder::choose_sev_lvl(
     const std::string& sev_lvl_str) {
   if (sev_lvl_str == "trace")
-    return logging::severity_level::trace;
+    return boost::log::trivial::severity_level::trace;
   else if (sev_lvl_str == "debug")
-    return logging::severity_level::debug;
+    return boost::log::trivial::severity_level::debug;
   else if (sev_lvl_str == "info")
-    return logging::severity_level::info;
+    return boost::log::trivial::severity_level::info;
   else if (sev_lvl_str == "warning")
-    return logging::severity_level::warning;
+    return boost::log::trivial::severity_level::warning;
   else
-    return logging::severity_level::error;
+    return boost::log::trivial::severity_level::error;
 }
-void Builder::settings_process(const boost::program_options::variables_map&vmap)
-{
+void Builder::settings_process(const boost::program_options::variables_map&
+                                   vmap) {
   bool install = false, pack = false;
   std::string config = "Debug";
   int time = 0;
@@ -143,9 +148,7 @@ void Builder::settings_process(const boost::program_options::variables_map&vmap)
   }
   if (vmap.count("timeout")) {
     BOOST_LOG_TRIVIAL(debug)
-        << "Timeout args got: "
-        << vmap["timeout"].as<int>()
-        << ". Setting timer";
+      << "Timeout args got: " << vmap["timeout"].as<int>() << ". Setting timer";
     time = vmap["timeout"].as<int>();
   }
   p_process = new Process(config, install, pack, time);

@@ -3,18 +3,20 @@
 #ifndef INCLUDE_BUILDER_HPP_
 #define INCLUDE_BUILDER_HPP_
 
-#include <iostream>
-#include <string>
-#include <boost/program_options.hpp>
-#include <boost/process.hpp>
-#include <boost/log/core.hpp>
-#include <boost/log/trivial.hpp>
-#include <boost/log/utility/setup/file.hpp>
-#include <boost/log/utility/setup/console.hpp>
-#include <boost/log/utility/setup/common_attributes.hpp>
 #include <async++.h>
 #include <pthread.h>
+
+#include <boost/log/core.hpp>
+#include <boost/log/trivial.hpp>
+#include <boost/log/utility/setup/common_attributes.hpp>
+#include <boost/log/utility/setup/console.hpp>
+#include <boost/log/utility/setup/file.hpp>
+#include <boost/process.hpp>
+#include <boost/program_options.hpp>
 #include <future>
+#include <iostream>
+#include <process.hpp>
+#include <string>
 
 #include <process.hpp>
 #include <timer.hpp>
