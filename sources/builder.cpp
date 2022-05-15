@@ -9,7 +9,7 @@ void Builder::create_program_options(
   desc.add_options()
       ("help,h", "Help screen\n")
       ("log_lvl,l", boost::program_options::value<std::string>()->
-           default_value("debug"),
+           default_value("Debug"),
            "Logger severity\n")
       ("config,c", boost::program_options::value<std::string>()->
           default_value("Debug"),

@@ -46,7 +46,6 @@ class Builder {
   bool run_process(const std::string& target, Process_info& process_info);
 
   ~Builder();
-
 };
 
 #endif // INCLUDE_BUILDER_HPP_

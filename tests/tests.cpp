@@ -5,11 +5,8 @@
 
 #include <gtest/gtest.h>
 
-#include <example.hpp>
-
-TEST(Example, EmptyTest) {
-    EXPECT_THROW(example(), std::runtime_error);
-}
+#include <builder.hpp>
+#include <timer.hpp>
 
 TEST(DISABLED_Snapshot, Speen) {
   for (;;) std::this_thread::yield();

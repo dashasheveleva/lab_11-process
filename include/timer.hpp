@@ -4,8 +4,8 @@
 #include <string>
 #include <utility>
 
-#ifndef TEMPLATE_TIMER_HPP
-#define TEMPLATE_TIMER_HPP
+#ifndef INCLUDE_TIMER_HPP_
+#define INCLUDE_TIMER_HPP_
 
 class Timer{
  private:
@@ -13,7 +13,6 @@ class Timer{
 
  public:
   Timer(Timer&& t) ;
-
   Timer(std::chrono::seconds delay,
         std::function<void(Process_info&)> callback_obj,
         Process_info& pdata)
@@ -24,4 +23,4 @@ class Timer{
   ~Timer() ;
 };
 
-#endif  // TEMPLATE_TIMER_HPP
+#endif  // INCLUDE_TIMER_HPP_
