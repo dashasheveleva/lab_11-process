@@ -1,6 +1,8 @@
 // Copyright 2022 Shevelyova Darya photodoshfy@gmail.com
 
 #include <process.hpp>
+#include <string>
+#include <utility>
 
 #ifndef INCLUDE_TIMER_HPP_
 #define INCLUDE_TIMER_HPP_

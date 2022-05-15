@@ -12,6 +12,7 @@ class Process{
   std::string config;
   bool install, pack;
   int time = 0;
+
  public:
   const std::string BUILD_TARGET = "_builds";
   const std::string INSTALL_TARGET = "_install";
