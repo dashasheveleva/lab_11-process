@@ -12,7 +12,9 @@ class Timer{
   std::thread _timer_thread;
 
  public:
-  Timer(Timer&& t) { _timer_thread = std::move(t._timer_thread); }
+  Timer(Timer&& t) {
+    _timer_thread = std::move(t._timer_thread);
+  }
 
   Timer(std::chrono::seconds delay,
         std::function<void(Process_info&)> callback_obj,
@@ -21,6 +23,7 @@ class Timer{
     std::this_thread::sleep_for(std::chrono::seconds(delay));
     callback_obj(pdata);
   }) {}
+
   ~Timer() {
     if (_timer_thread.joinable()) _timer_thread.detach();
   }

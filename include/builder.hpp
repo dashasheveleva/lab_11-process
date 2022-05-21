@@ -5,7 +5,6 @@
 
 #include <async++.h>
 #include <pthread.h>
-
 #include <boost/log/core.hpp>
 #include <boost/log/trivial.hpp>
 #include <boost/log/utility/setup/common_attributes.hpp>
@@ -22,7 +21,7 @@
 
 namespace logging = boost::log::trivial;
 
-const char error[] = "Error\n"
+const char error[] = "Error"
     "Write to get Help: --help or -h";
 
 class Builder {
@@ -30,6 +29,7 @@ class Builder {
   Process* p_process;
 
  public:
+  // выводим все возможные команды
   static void create_program_options(
       boost::program_options::options_description& desc,
       boost::program_options::variables_map&vmap,

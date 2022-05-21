@@ -7,28 +7,42 @@ void Builder::create_program_options(
     boost::program_options::variables_map& vmap,
     const int& argc, const char** argv) {
   desc.add_options()
-      ("help,h", "Help screen\n")
+      ("help,h", "Help screen")
 
       ("log_lvl,l", boost::program_options::value<std::string>()->
           default_value("debug"),
-           "Logger severity\n")
+           "Logger severity")
 
       ("config,c", boost::program_options::value<std::string>()->
           default_value("Debug"),
-       "Config build\n")
+       "Config build")
 
-      ("install,i", "Install step\n")
+      ("install,i", "Install step")
 
-      ("pack,p", "Pack step\n")
+      ("pack,p", "Pack step")
 
       ("timeout,t", boost::program_options::value<int>()
-          ->default_value(0),
-                           "Set waiting time\n");
+          ->default_value(0), "Set waiting time");
+  //Сохраняет в 'vmap' все опции, определенные в 'options'
   store(parse_command_line(argc, argv, desc), vmap);
+  //Запускает все функции «уведомления» для параметров в 'vmap'
   notify(vmap);
 }
 
 void time_handler(Process_info&);
+void time_handler(Process_info& process_info) {
+  BOOST_LOG_TRIVIAL(debug) << "Timer timeout. Stopping all child processes...";
+  try {
+    if (process_info.current_child.running()) {
+      process_info.current_child.terminate();
+    }
+    process_info.set_bool(true);
+    BOOST_LOG_TRIVIAL(debug) << "_pdata set: " << process_info.terminated;
+  } catch (const std::exception& e) {
+    BOOST_LOG_TRIVIAL(fatal) << "Terminating error: " << e.what()
+                             << " Process: " << process_info.current_child.id();
+  }
+}
 
 void Builder::start(const boost::program_options::variables_map& vm) {
   init(choose_sev_lvl(vm["log_lvl"].as<std::string>()));
@@ -119,6 +133,7 @@ void Builder::init(const boost::log::trivial::severity_level& sev_lvl) {
                               boost::log::keywords::format =
                                   "[%Severity%] %TimeStamp%: %Message%");
 }
+
 boost::log::trivial::severity_level Builder::choose_sev_lvl(
     const std::string& sev_lvl_str) {
   if (sev_lvl_str == "trace")
@@ -155,17 +170,4 @@ void Builder::settings_process(const boost::program_options::variables_map&
 }
 Builder::~Builder() {
   delete p_process;
-}
-void time_handler(Process_info& process_info) {
-  BOOST_LOG_TRIVIAL(debug) << "Timer timeout. Stopping all child processes...";
-  try {
-    if (process_info.current_child.running()) {
-      process_info.current_child.terminate();
-    }
-    process_info.set_bool(true);
-    BOOST_LOG_TRIVIAL(debug) << "_pdata set: " << process_info.terminated;
-  } catch (const std::exception& e) {
-    BOOST_LOG_TRIVIAL(fatal) << "Terminating error: " << e.what()
-                             << " Process: " << process_info.current_child.id();
-  }
 }
